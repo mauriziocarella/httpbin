@@ -1,7 +1,7 @@
 {
-  "name": "httpbin-tools",
+  "name": "httpbin",
   "private": true,
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A public webhook inspector with configurable responses and real-time event monitoring.",
   "license": "MIT",
   "repository": "github:mauriziocarella/httpbin",

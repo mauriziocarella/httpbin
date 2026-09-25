@@ -1,6 +1,6 @@
-# httpbin.tools
+# httpbin
 
-httpbin.tools is a public webhook inspector for creating temporary endpoints, monitoring incoming HTTP requests in real time, and controlling the response returned to the caller.
+httpbin is a public webhook inspector for creating temporary endpoints, monitoring incoming HTTP requests in real time, and controlling the response returned to the caller.
 
 The hosted application is available at [https://httpbin.tools.mauriziocarella.it](https://httpbin.tools.mauriziocarella.it).
 
