@@ -15,6 +15,7 @@ import { cn } from "./lib/utils";
 import { useAppStore } from "./store/use-app-store";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
+import packageJson from "../package.json";
 
 const ResponseBodyEditor = lazy(() => import("./components/response-body-editor"));
 
@@ -112,6 +113,7 @@ function AppHeader() {
     <button onClick={() => navigate("/")} className="flex min-w-0 items-center gap-2.5 rounded-md outline-none" aria-label="Go to home">
       <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-amber-400 text-slate-950 shadow-[0_0_22px_rgba(251,191,36,.17)]"><Radio className="size-4" strokeWidth={2.6} /></span>
       <span className="text-[15px] font-semibold tracking-[-.02em] text-white">httpbin.tools</span>
+      <span className="font-mono text-[10px] text-slate-600" aria-label={`Version ${packageJson.version}`}>v{packageJson.version}</span>
     </button>
     <div className="ml-auto"><ThemeMenu theme={themePreference.theme} onChange={themePreference.setTheme} /></div>
   </header>;
