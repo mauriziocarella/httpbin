@@ -1,8 +1,8 @@
-name: httpbin-tools
+name: webhook-inspector
 
 services:
   httpbin:
-    image: ${HTTPBIN_IMAGE:-ghcr.io/mauriziocarella/httpbin:latest}
+    image: ghcr.io/your-user/httpbin:latest
     restart: unless-stopped
     environment:
       PORT: 3000
@@ -18,10 +18,10 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=http-proxy
-      - traefik.http.routers.httpbin-tools.rule=Host(`httpbin.tools.mauriziocarella.it`)
-      - traefik.http.routers.httpbin-tools.entrypoints=websecure
-      - traefik.http.routers.httpbin-tools.tls.certresolver=letsencrypt
-      - traefik.http.services.httpbin-tools.loadbalancer.server.port=3000
+      - traefik.http.routers.webhook-inspector.rule=Host(`webhook.example.com`)
+      - traefik.http.routers.webhook-inspector.entrypoints=websecure
+      - traefik.http.routers.webhook-inspector.tls.certresolver=letsencrypt
+      - traefik.http.services.webhook-inspector.loadbalancer.server.port=3000
 
 volumes:
   httpbin-data:

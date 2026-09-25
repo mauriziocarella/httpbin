@@ -78,9 +78,9 @@ curl -X POST 'http://localhost:3000/hook/YOUR_TOKEN/orders?source=demo' \
 
 ## Deployment
 
-`docker-compose.production.yml` connects the application to an existing external `http-proxy` network and exposes it through Traefik with a Let's Encrypt certificate.
+[`docker-compose.traefik.example.yml`](docker-compose.traefik.example.yml) shows a generic Traefik deployment. Copy it outside the repository, replace the example image and hostname, and keep the real production Compose file on the target server.
 
-Tagged releases are built and pushed to `ghcr.io/mauriziocarella/httpbin`. The release workflow copies only the production Compose manifest to the VPS, deploys the exact tagged image, and verifies the container health check. Source code is never cloned or stored on the VPS.
+Tagged releases are built and pushed to `ghcr.io/mauriziocarella/httpbin`. The release workflow connects to the VPS, runs the server-owned Compose file, deploys the exact tagged image, and verifies the container health check. Source code and the production Compose file are never copied from the repository to the VPS.
 
 The deployment workflow requires these repository secrets:
 
