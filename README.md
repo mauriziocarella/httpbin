@@ -65,6 +65,7 @@ The application is exposed on `http://localhost:3000`. The `httpbin-data` volume
 | `DEFAULT_RETENTION_HOURS` | `168` | Default event retention in hours |
 | `MAX_PAYLOAD_BYTES` | `2097152` | Maximum accepted request body size |
 | `HOOK_RATE_LIMIT_PER_MINUTE` | `120` | Requests allowed per minute for each IP and endpoint |
+| `TRUST_PROXY` | empty | Comma-separated IP addresses or CIDR ranges of trusted reverse proxies |
 
 ## Example
 
@@ -79,6 +80,8 @@ curl -X POST 'http://localhost:3000/hook/YOUR_TOKEN/orders?source=demo' \
 ## Deployment
 
 [`docker-compose.traefik.example.yml`](docker-compose.traefik.example.yml) shows a generic Traefik deployment. Copy it outside the repository, replace the example image and hostname, and keep the real production Compose file on the target server.
+
+The example trusts the private Docker address range so Fastify can resolve the original client IP from Traefik's `X-Forwarded-For` header. Restrict `TRUST_PROXY` to the network used by your reverse proxy; never use a blanket trust setting on a publicly reachable application origin.
 
 Tagged releases are built and pushed to `ghcr.io/mauriziocarella/httpbin`. The release workflow connects to the VPS, runs the server-owned Compose file, deploys the exact tagged image, and verifies the container health check. Source code and the production Compose file are never copied from the repository to the VPS.
 

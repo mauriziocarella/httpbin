@@ -11,6 +11,7 @@ services:
       DEFAULT_RETENTION_HOURS: 168
       MAX_PAYLOAD_BYTES: 2097152
       HOOK_RATE_LIMIT_PER_MINUTE: 120
+      TRUST_PROXY: 172.16.0.0/12
     volumes:
       - httpbin-data:/app/data
     networks:

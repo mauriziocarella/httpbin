@@ -11,7 +11,8 @@ import {
 
 const maxPayloadBytes = Number(process.env.MAX_PAYLOAD_BYTES || 2 * 1024 * 1024);
 const rateLimitPerMinute = Number(process.env.HOOK_RATE_LIMIT_PER_MINUTE || 120);
-const app = Fastify({ logger: true, bodyLimit: maxPayloadBytes });
+const trustedProxies = process.env.TRUST_PROXY?.split(",").map((value) => value.trim()).filter(Boolean) ?? [];
+const app = Fastify({ logger: true, bodyLimit: maxPayloadBytes, trustProxy: trustedProxies });
 const port = Number(process.env.PORT || 3000);
 const clients = new Map<string, Set<NodeJS.WritableStream>>();
 const rateBuckets = new Map<string, { startedAt: number; count: number }>();

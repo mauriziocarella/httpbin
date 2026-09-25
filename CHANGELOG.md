@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-25
+
+### Fixed
+
+- Resolve source IP addresses from forwarding headers when requests arrive through a configured trusted reverse proxy.
+
 ## [0.1.0] - 2026-09-25
 
 ### Added
@@ -19,5 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Responsive React interface with light, dark, and system themes.
 - Docker image, Traefik deployment configuration, health checks, and release automation.
 
-[Unreleased]: https://github.com/mauriziocarella/httpbin/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/mauriziocarella/httpbin/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/mauriziocarella/httpbin/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/mauriziocarella/httpbin/releases/tag/v0.1.0
