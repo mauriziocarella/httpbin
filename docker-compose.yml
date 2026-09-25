@@ -1,0 +1,16 @@
+services:
+  httpbin:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - httpbin-data:/app/data
+    restart: unless-stopped
+    environment:
+      MAX_EVENTS_PER_ENDPOINT: 500
+      DEFAULT_RETENTION_HOURS: 168
+      MAX_PAYLOAD_BYTES: 2097152
+      HOOK_RATE_LIMIT_PER_MINUTE: 120
+
+volumes:
+  httpbin-data:

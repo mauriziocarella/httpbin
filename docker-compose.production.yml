@@ -1,0 +1,31 @@
+name: httpbin-tools
+
+services:
+  httpbin:
+    image: ${HTTPBIN_IMAGE:-ghcr.io/mauriziocarella/httpbin:latest}
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      DATA_DIR: /app/data
+      MAX_EVENTS_PER_ENDPOINT: 500
+      DEFAULT_RETENTION_HOURS: 168
+      MAX_PAYLOAD_BYTES: 2097152
+      HOOK_RATE_LIMIT_PER_MINUTE: 120
+    volumes:
+      - httpbin-data:/app/data
+    networks:
+      - http-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=http-proxy
+      - traefik.http.routers.httpbin-tools.rule=Host(`httpbin.tools.mauriziocarella.it`)
+      - traefik.http.routers.httpbin-tools.entrypoints=websecure
+      - traefik.http.routers.httpbin-tools.tls.certresolver=letsencrypt
+      - traefik.http.services.httpbin-tools.loadbalancer.server.port=3000
+
+volumes:
+  httpbin-data:
+
+networks:
+  http-proxy:
+    external: true
