@@ -53,18 +53,23 @@ jobs:
     env:
       VERSION: ${{ github.event_name == 'push' && github.ref_name || inputs.version }}
     steps:
+      - uses: actions/checkout@v7
       - name: Configure SSH
         run: |
           install -m 700 -d ~/.ssh
           printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      - name: Copy deployment manifest
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "install -d /home/${{ secrets.VPS_USER }}/docker/httpbin"
+          scp docker-compose.production.yml "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USER }}/docker/httpbin/docker-compose.yml"
       - name: Log in to GHCR on the VPS
         run: |
           printf '%s' "${{ secrets.GITHUB_TOKEN }}" | ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "docker login ghcr.io --username '${{ github.actor }}' --password-stdin"
       - name: Deploy release
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "cd /home/${{ secrets.VPS_USER }}/httpbin && git fetch --tags origin && git checkout --force '${{ github.sha }}' && HTTPBIN_IMAGE='${IMAGE}:${VERSION}' docker compose -f docker-compose.production.yml pull && HTTPBIN_IMAGE='${IMAGE}:${VERSION}' docker compose -f docker-compose.production.yml up -d --remove-orphans && docker logout ghcr.io"
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "cd /home/${{ secrets.VPS_USER }}/docker/httpbin && HTTPBIN_IMAGE='${IMAGE}:${VERSION}' docker compose pull && HTTPBIN_IMAGE='${IMAGE}:${VERSION}' docker compose up -d --remove-orphans && docker logout ghcr.io"
       - name: Verify deployment
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "for attempt in 1 2 3 4 5 6; do status=\$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' httpbin-tools-httpbin-1 2>/dev/null || true); [ \"\$status\" = healthy ] && exit 0; sleep 5; done; docker compose -f /home/${{ secrets.VPS_USER }}/httpbin/docker-compose.production.yml logs --tail=100; exit 1"
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "for attempt in 1 2 3 4 5 6; do status=\$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' httpbin-tools-httpbin-1 2>/dev/null || true); [ \"\$status\" = healthy ] && exit 0; sleep 5; done; docker compose -f /home/${{ secrets.VPS_USER }}/docker/httpbin/docker-compose.yml logs --tail=100; exit 1"
